@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "ragathon-manga"
+version = "0.1.0"
+description = ""
+authors = ["aka-lacie <freyaz495@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+openai = "^1.11.0"
+manga-ocr = "^0.1.11"
+ipykernel = "^6.29.0"
+transformers = "^4.37.2"
+tiktoken = "^0.5.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
