@@ -6,7 +6,7 @@ import google.generativeai as genai
 import re
 from utils import *
 
-instructions_1 = "You are localizing an anime light novel. Identify named entities (such as proper nouns and unique terminologies) in the provided text passage and suggest English translations."
+instructions_1 = "You are localizing an anime light novel. Identify named entities (such as proper nouns and unique terminologies) in the provided text passage and suggest English translations. Do not include common or general terms."
 instructions_2 = "Do not redefine terms already in the glossary. "
 instructions_3 = "Output in JSON format: `{ \"original_word\": \"translated_word\", ... }`."
 
