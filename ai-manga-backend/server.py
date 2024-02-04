@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from utils import *
+from ner import build_glossary_pipeline_gemini, build_glossary_pipeline_gpt3
+from translate import translate_chunk_with_gpt4, refine_translation_with_gpt4
 
 app = FastAPI()
 
@@ -20,9 +23,15 @@ app.add_middleware(
 async def main():
     return {"message": "Hello World"}
 
+@app.post("/ner")
+async def get_proposed_glossary(request):
+    source_text = await request.body()
+    return propose_glossary(source_text)
+
 @app.post("/translate")
 async def get_body(request):
-    text_to_translate = await request.body()
+    text_to_translate = await request.json['text']
+    glossary = await request.json['glossary']
     def freyaTODO(text):
         return [
             ['orig1', 'trans1'],
@@ -33,3 +42,10 @@ async def get_body(request):
             ['orig6', 'trans6'],
         ]
     return freyaTODO(text_to_translate)
+
+def propose_glossary(source_text: str) -> list[list[str]]:
+    glossary = build_glossary_pipeline_gemini(source_text)
+    glossary_list = []
+    for k, v in glossary.items():
+        glossary_list.append([k, v])
+    return glossary_list
