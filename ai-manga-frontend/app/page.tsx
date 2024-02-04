@@ -38,49 +38,16 @@ export default function Home() {
     }
 
     const decoder = new TextDecoder();
-    let heartbeatTimeout;
     
     while (true) {
       const { done, value } = await reader.read();
+      // console.log([done, value, reader])
       if (done) break;
       
-      const message = JSON.parse(decoder.decode(value));
-      switch (message.type) {
-        case 'keep-alive':
-          clearTimeout(heartbeatTimeout);
-          heartbeatTimeout = setTimeout(() => {
-              // No heartbeat received for 10 seconds, assume connection drop
-              // setQueryStatus('error');
-              // setErrorMsg('Connection dropped unexpectedly. Please try again.');
-              // killWordCloud.current = true;
-              reader.cancel();
-          }, 10000);
-          break;
-        case 'snippets':
-          setTimeout(() => {
-            // setQueryStatus('searchingDatabase');
-          }
-          , 1000);
-          setTranslatedText((prevArr) => prevArr ? prevArr.concat(message.data) : [message.data]);
-          break;
-        case 'response':
-          setTranslatedText((prevArr) => prevArr ? prevArr.concat(message.data) : [message.data]);
-          reader.cancel();
-          clearTimeout(heartbeatTimeout);
-          break;
-
-          case 'error':
-          // setQueryStatus('error');
-          // setErrorMsg(message.data);
-          reader.cancel();
-          clearTimeout(heartbeatTimeout);
-          
-          // if (message.data.includes('access code')) {
-          //   localStorage.setItem('accessCode', '');
-          //   (document.activeElement as HTMLInputElement)?.blur();
-          // }
-          break;
-      }
+      const decodedValue = decoder.decode(value);
+      
+      const message = JSON.parse(decodedValue);
+      setTranslatedText((prevArr) => prevArr ? prevArr.concat(message.data) : [message.data]);
     }
   }
 

@@ -28,12 +28,16 @@ def translate_pipeline_gpt4(source_text: str, glossary: dict = None) -> Generato
             if data.choices[0].delta.content is not None:
                 translated_chunk += data.choices[0].delta.content
             else: # end of stream
-                yield "data: " + translated_chunk + "\n\n"
+                packet = json.dumps({"data": str(translated_chunk)}) + '\n'
+                print(packet, end="")
+                yield packet
                 translated_chunk = ""
                 continue
             
-            if translated_chunk.endswith("\n"): # flush line by line   
-                yield "data: " + translated_chunk + "\n\n"
+            if translated_chunk.endswith("\n"): # flush line by line
+                packet = json.dumps({"data": str(translated_chunk)}) + '\n'
+                print(packet, end="")
+                yield packet
                 translated_chunk = ""
 
 

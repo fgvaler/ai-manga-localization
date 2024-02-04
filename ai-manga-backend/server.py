@@ -29,5 +29,5 @@ def translate(payload: Dict[Any, Any]):
 
     return StreamingResponse(
         get_translation(text_to_translate),
-        media_type='text/event-stream'
+        media_type='application/x-ndjson'
     )
