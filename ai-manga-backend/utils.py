@@ -1,9 +1,4 @@
 import tiktoken
-import os
-from openai import OpenAI
-import json
-import google.generativeai as genai
-import re
 
 def num_tokens(text: str, model: str = "gpt-3.5-turbo") -> int:
     """Return the number of tokens in a string."""

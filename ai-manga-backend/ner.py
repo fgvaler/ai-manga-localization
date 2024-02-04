@@ -1,10 +1,10 @@
-import tiktoken
 import os
-from openai import OpenAI
 import json
 import google.generativeai as genai
+from openai import OpenAI
 import re
 from utils import *
+from typing import Literal
 
 instructions_1 = "You are localizing an anime light novel. Identify named entities (such as proper nouns and unique terminologies) in the provided text passage and suggest English translations. Do not include common or general terms."
 instructions_2 = "Do not redefine terms already in the glossary. "
@@ -130,4 +130,13 @@ def build_glossary_pipeline_gemini(source_text: str, chunk_size: int = CHUNK_SIZ
             update_glossary(glossary, json.loads(match.group()))
             print(str(glossary), end='\r')
 
+    return glossary
+
+def create_glossary(source_text: str, model: Literal['gemini', 'gpt']) -> dict:
+    if model == 'gemini':
+        glossary = build_glossary_pipeline_gemini(source_text)
+    elif model == 'gpt':
+        glossary = build_glossary_pipeline_gpt3(source_text)
+    else:
+        raise ValueError(f"Invalid model: 'gemini' or 'gpt' expected, got '{model}'")
     return glossary
