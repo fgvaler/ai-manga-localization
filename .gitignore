@@ -1,0 +1,36 @@
+# Ignore pycache
+__pycache__
+
+# Ignore Visual Studio Code files
+.vscode/
+
+# Ignore editor-specific files
+*.swp
+*.swo
+*.bak
+
+# Ignore compiled files
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore environment-specific files
+.env
+.env.*
+
+# Ignore package manager files
+node_modules/
+package-lock.json
+yarn.lock
+
+# Ignore build output
+dist/
+build/
+out/
+
+# Ignore logs
+*.log
+
+# Ignore system files
+.DS_Store
+Thumbs.db

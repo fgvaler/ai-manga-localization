@@ -11,7 +11,9 @@ openai = "^1.11.0"
 manga-ocr = "^0.1.11"
 ipykernel = "^6.29.0"
 transformers = "^4.37.2"
+google-generativeai = "^0.3.2"
 tiktoken = "^0.5.2"
+fastapi = "^0.109.1"
 
 
 [build-system]
