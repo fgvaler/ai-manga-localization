@@ -9,13 +9,13 @@ export default function Home() {
   const [highlightedRow, setHighlightedRow] = useState<number>(-1)
   const [textBoxContent, setTextBoxContent] = useState<string>('')
 
-  const [translatedText, setTranslatedText] = useState<string[] | null>(null)
+  const [translatedText, setTranslatedText] = useState<string[]>([])
   const [loading, setLoading] = useState<boolean>(false)
 
   const origTextLines = textBoxContent.split('\n').map(line=>line.trim()).filter(line=>line.length > 0)
-  const numLines = Math.min(origTextLines.length, translatedText ? translatedText.length : 0)
+  const numLines = Math.min(origTextLines.length, translatedText.length)
   const origTextFirstN = origTextLines.slice(0, numLines)
-  const translatedTextFirstN = translatedText ? translatedText.slice(0, numLines) : []
+  const translatedTextFirstN = translatedText.slice(0, numLines)
 
   const fetchTranslation = async (text: string) => {
     setLoading(true)
@@ -28,9 +28,6 @@ export default function Home() {
         'text': text
       })
     })
-    // const data = await res.json()
-    // setTranslatedText(data['data'])
-
 
     const reader = res.body?.getReader();
     if (!reader) { // make typescript happy
@@ -41,17 +38,15 @@ export default function Home() {
     
     while (true) {
       const { done, value } = await reader.read();
-      // console.log([done, value, reader])
       if (done) break;
       
       const decodedValue = decoder.decode(value);
-      
       const message = JSON.parse(decodedValue);
-      setTranslatedText((prevArr) => prevArr ? prevArr.concat(message.data) : [message.data]);
+      setTranslatedText((prevArr) => [...prevArr, message.data])
     }
   }
 
-  const dynamicRows = translatedText?{ gridTemplateRows: `repeat(${numLines}, minmax(0, 1fr))` }:{}
+  const dynamicGridStyling = { gridTemplateRows: `repeat(${numLines}, minmax(0, max-content))`, gridTemplateCols: `repeat(2, 1fr)` }
 
   const textUploader = <div className={cn('flex flex-col items-center justify-center h-full')}>
     <textarea
@@ -72,7 +67,7 @@ export default function Home() {
     }
   </div>
 
-  const translationDisplay = translatedText ? <div style={dynamicRows} className={cn('grid grid-cols-2 grid-flow-col gap-x-4 gap-y-1')}>
+  const translationDisplay = <div style={dynamicGridStyling} className={cn('inline-grid grid-cols-2 grid-flow-col gap-x-4 gap-y-1 w-full')}>
     {origTextFirstN.map((line, i)=>
       <div
         key={i}
@@ -93,12 +88,12 @@ export default function Home() {
         {line}
       </div>)
     }
-  </div> : null
+  </div>
 
   return (
     <div className={cn("flex flex-col items-center justify-center bg-green-300 h-full p-12")}>
       <div className={cn('text-lg bg-slate-900 w-full h-full max-w-[800px] overflow-auto p-4')}>
-        {translatedText !== null ? translationDisplay : textUploader}
+        {translatedText.length > 0 ? translationDisplay : textUploader}
       </div>
     </div>
   )

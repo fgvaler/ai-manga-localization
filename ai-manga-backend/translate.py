@@ -7,7 +7,7 @@ import re
 from utils import *
 from typing import Generator
 
-prompt_1 = f"You are localizing an anime light novel. Use the provided glossary with preferred terminology mappings to translate the following passage from Chinese to English. Match the style and tone of the original text, and preserve line breaks. Output format: string of translated text only"
+prompt_1 = "You are localizing an anime light novel. Use the provided glossary with preferred terminology mappings to translate the following passage from Chinese to English. Match the style and tone of the original text. Preserve newline positions (\\n). Output format: string of translated text only"
 prompt_2 = "Refine your translation to natural English without losing nuance. Output format: string of refined translation only"
 
 gpt_client = OpenAI(
